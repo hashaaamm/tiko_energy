@@ -16,17 +16,17 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include('djoser.urls')),
-    path("auth/", include('djoser.urls.jwt')),
+    path("api/auth/", include("djoser.urls")),
+    path("api/auth/", include("djoser.urls.jwt")),
 ]
 
-#/users/ regsiter user
-#/users/me
+# /users/ register user
+# /users/me
 
-#/jwt/create/  login/post
-#/jwt/refresh/ refresh/post
-#/jwt/verify/  
+# /jwt/create/  login/post
+# /jwt/refresh/ refresh/post
+# /jwt/verify/
