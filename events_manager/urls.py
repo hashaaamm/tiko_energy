@@ -23,10 +23,3 @@ urlpatterns = [
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
 ]
-
-# /users/ register user
-# /users/me
-
-# /jwt/create/  login/post
-# /jwt/refresh/ refresh/post
-# /jwt/verify/

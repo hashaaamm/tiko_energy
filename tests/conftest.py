@@ -34,7 +34,16 @@ def login_user(api_client, create_user, valid_payload):
         create_user()
         url = reverse("jwt-create")
         response = api_client.post(url, payload, format="json")
-        print(response.data)
         return response
 
     return _login_user
+
+
+@pytest.fixture
+def refresh_token(api_client, login_user):
+
+    def _refresh_token(payload):
+        url = reverse("jwt-refresh")
+        return api_client.post(url, payload, format="json")
+
+    return _refresh_token
