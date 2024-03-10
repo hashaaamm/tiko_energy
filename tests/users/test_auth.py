@@ -103,3 +103,44 @@ def test_refresh_token_invalid_data(
     response = refresh_token(payload)
     assert response.status_code == status_code
     assert response.data == expected_errors
+
+
+@pytest.mark.django_db
+def test_verify_token_valid_data(login_user, verify_token):
+    """Test verify token using a valid access token"""
+    response_login_user = login_user()
+    assert response_login_user.status_code == status.HTTP_200_OK
+
+    response_verify_token = verify_token({"token": response_login_user.data["access"]})
+    assert response_verify_token.status_code == status.HTTP_200_OK
+
+
+pytest.mark.django_db
+
+
+@pytest.mark.parametrize(
+    "verify_token, payload, expected_errors, status_code",
+    [
+        [
+            "verify_token",
+            {},
+            {
+                "token": [REQUIRED_ERROR],
+            },
+            status.HTTP_400_BAD_REQUEST,
+        ],
+        [
+            "verify_token",
+            {"token": "fake_token"},
+            {"detail": "Token is invalid or expired", "code": "token_not_valid"},
+            status.HTTP_401_UNAUTHORIZED,
+        ],
+    ],
+    indirect=["verify_token"],
+)
+@pytest.mark.django_db
+def test_verify_token_invalid_data(verify_token, payload, expected_errors, status_code):
+    """Test verify token using a invalid access token"""
+    response = verify_token(payload)
+    assert response.status_code == status_code
+    assert response.data == expected_errors

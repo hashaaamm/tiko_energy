@@ -40,10 +40,19 @@ def login_user(api_client, create_user, valid_payload):
 
 
 @pytest.fixture
-def refresh_token(api_client, login_user):
+def refresh_token(api_client):
 
     def _refresh_token(payload):
         url = reverse("jwt-refresh")
         return api_client.post(url, payload, format="json")
 
     return _refresh_token
+
+
+@pytest.fixture
+def verify_token(api_client):
+    def _verify_token(payload):
+        url = reverse("jwt-verify")
+        return api_client.post(url, payload, format="json")
+
+    return _verify_token
