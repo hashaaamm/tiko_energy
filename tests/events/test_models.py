@@ -1,6 +1,6 @@
 import pytest
 from django.utils import timezone
-from events.models import Events
+from events.models import Event
 from users.models import CustomUser
 
 
@@ -17,7 +17,7 @@ def test_events_model(create_user):
     start_date = timezone.now()
     end_date = start_date + timezone.timedelta(hours=5)
     event_type = " Meeting"
-    events = Events(
+    events = Event(
         name=name,
         owner=owner,
         description=description,

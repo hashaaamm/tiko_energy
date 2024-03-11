@@ -5,7 +5,7 @@ from django.utils import timezone
 User = get_user_model()
 
 
-class Events(models.Model):
+class Event(models.Model):
     name = models.CharField(max_length=50)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
     description = models.TextField()
@@ -29,3 +29,7 @@ class Events(models.Model):
                 return f"Happening at {self.start_date}"
             return f"Held on {self.start_date}"
         return "Cancelled"
+
+    @property
+    def number_of_attendees(self):
+        return self.list_of_attendees.count()

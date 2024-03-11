@@ -1,6 +1,9 @@
 import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 @pytest.fixture
@@ -11,6 +14,11 @@ def api_client():
 @pytest.fixture
 def valid_payload():
     return {"email": "jhon@example.com", "password": "asuh9898hs"}
+
+
+@pytest.fixture
+def valid_user():
+    return User.objects.create_user(email="test123@example.com", password="asuh9898hs")
 
 
 @pytest.fixture
