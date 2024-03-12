@@ -30,6 +30,7 @@ This is an Event manager app which allow organisers to create and manage events 
 - Users can cancel only events they have created.
 - Users can subscribe or unsubscribe to events
 - Events have validation
+- Users can not subscribe to event if max limit reach
 
 
 ## Requirements
