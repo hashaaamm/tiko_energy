@@ -56,28 +56,15 @@ class EventListCreateSerializer(serializers.ModelSerializer):
         ]
 
 
-class EventDetailSerializer(serializers.ModelSerializer):
+class EventDetailUpdateSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
+    list_of_attendees = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    number_of_attendees = serializers.ReadOnlyField
+    created_date = serializers.ReadOnlyField()
+    updated_date = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField()
 
-    class Meta:
-        model = Event
-        fields = [
-            "id",
-            "name",
-            "owner",
-            "description",
-            "start_date",
-            "end_date",
-            "event_type",
-            "list_of_attendees",
-            "created_date",
-            "updated_date",
-            "status",
-            "number_of_attendees",
-        ]
-
-
-class EventUpdateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """
         Validate start_date and end_date are in the future,
@@ -114,12 +101,18 @@ class EventUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
+            "id",
             "name",
             "owner",
             "description",
             "start_date",
             "end_date",
             "event_type",
+            "list_of_attendees",
+            "created_date",
+            "updated_date",
+            "status",
+            "number_of_attendees",
             "active",
         ]
 

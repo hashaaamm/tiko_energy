@@ -1,13 +1,11 @@
 import pytest
 from events.serializers import (
     EventListCreateSerializer,
-    EventDetailSerializer,
-    EventUpdateSerializer,
+    EventDetailUpdateSerializer,
     EventSubscribeSerializer,
 )
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from ..error_messages import REQUIRED_ERROR
 from events.models import Event
 from django.utils.dateparse import parse_datetime
 from django.http import HttpRequest
@@ -128,7 +126,7 @@ def test_event_detail_serializer(valid_user):
         event_type=event_type,
     )
     event.list_of_attendees.set([valid_user])
-    serializer = EventDetailSerializer(event)
+    serializer = EventDetailUpdateSerializer(event)
     data = serializer.data
     assert data["name"] == name
     assert data["owner"] == owner.pk
@@ -160,7 +158,7 @@ def test_event_update_serializer(valid_user):
         event_type=event_type,
     )
     instance = Event.objects.first()
-    serializer = EventUpdateSerializer(
+    serializer = EventDetailUpdateSerializer(
         instance,
         data={
             "name": "New event name",

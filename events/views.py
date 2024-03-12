@@ -1,6 +1,9 @@
 from rest_framework import generics
 from .models import Event
-from .serializers import EventListCreateSerializer, EventDetailSerializer
+from .serializers import (
+    EventListCreateSerializer,
+    EventDetailUpdateSerializer,
+)
 from rest_framework import permissions
 
 from .mixins import QuerysetFilterMixin
@@ -28,7 +31,7 @@ class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
         return self.filter_queryset(queryset)
 
 
-class EventsDetailView(generics.RetrieveAPIView):
+class EventsDetailUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Event.objects.all()
-    serializer_class = EventDetailSerializer
     permission_classes = [permissions.AllowAny]
+    serializer_class = EventDetailUpdateSerializer

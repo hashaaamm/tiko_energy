@@ -115,7 +115,7 @@ def test_event_list(api_client, event_create_with_login):
 @pytest.mark.django_db
 def test_event_details(api_client, event_create_with_login):
     event = event_create_with_login()
-    url = reverse("events-detail", kwargs={"pk": event.data["id"]})
+    url = reverse("events-detail-update", kwargs={"pk": event.data["id"]})
     response = api_client.get(url)
     data = response.data
 
@@ -132,3 +132,33 @@ def test_event_details(api_client, event_create_with_login):
     assert data["created_date"]
     assert data["updated_date"]
     assert data["status"]
+
+
+@pytest.mark.django_db
+def test_event_update(client_with_credentials, event_create_with_login):
+    event = event_create_with_login()
+    url = reverse("events-detail-update", kwargs={"pk": event.data["id"]})
+    response = client_with_credentials.get(url)
+    assert response.status_code == status.HTTP_200_OK
+
+    payload = {
+        "name": "updated name",
+        "description": "updated description",
+        "start_date": "2026-03-15T10:00:00Z",
+        "end_date": "2027-03-15T15:00:00Z",
+        "event_type": "updated type",
+        "active": False,
+    }
+    update_response = client_with_credentials.put(
+        url,
+        data=payload,
+        format="json",
+    )
+    assert update_response.status_code == status.HTTP_200_OK
+    data = update_response.data
+    assert data["name"] == payload["name"]
+    assert data["description"] == payload["description"]
+    assert data["start_date"] == payload["start_date"]
+    assert data["end_date"] == payload["end_date"]
+    assert data["event_type"] == payload["event_type"]
+    assert data["active"] == payload["active"]
