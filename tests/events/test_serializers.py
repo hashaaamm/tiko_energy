@@ -62,7 +62,6 @@ def test_event_create_serializer_with_invalid_date(
     valid_user, payload, field, expected_errors
 ):
     """Test serializer using invalid date"""
-    # payload["owner"] = valid_user.pk
     request = HttpRequest()
     request.user = valid_user
     serializer = EventListCreateSerializer(
@@ -190,9 +189,10 @@ def test_event_subscribe_serializer(valid_user):
     )
     instance = Event.objects.first()
     request = HttpRequest()
+    request.path = "/subscribe"
     request.user = valid_user
     serializer = EventSubscribeSerializer(
-        instance, data={"subscribe": True}, context={"request": request}
+        instance, data={}, context={"request": request}
     )
     assert serializer.is_valid()
     assert serializer.save()

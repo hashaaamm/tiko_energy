@@ -117,19 +117,28 @@ class EventDetailUpdateSerializer(serializers.ModelSerializer):
         ]
 
 
-class EventSubscribeSerializer(serializers.ModelSerializer):
-    subscribe = serializers.BooleanField(write_only=True)
+class EventSubscribeSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
-        subscribe = validated_data.get("subscribe")
         user = self.context["request"].user
-        if subscribe:
-            instance.list_of_attendees.add(user)
-        else:
-            instance.list_of_attendees.remove(user)
-        instance.save()
-        return instance
+        success = False
 
-    class Meta:
-        model = Event
-        fields = ["subscribe"]
+        if "/subscribe" in self.context["request"].path:
+
+            if user not in instance.list_of_attendees.all():
+                instance.list_of_attendees.add(user)
+                message = "Subscribed to the event"
+                success = True
+            else:
+                message = "Already Subscribed"
+        elif "/unsubscribe" in self.context["request"].path:
+            if user in instance.list_of_attendees.all():
+                instance.list_of_attendees.remove(user)
+                message = "Unsubscribed from the event"
+                success = True
+
+            else:
+                message = "Already Unsubscribed"
+
+        instance.save()
+        return {"message": message, "success": success}

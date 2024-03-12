@@ -198,3 +198,76 @@ def test_event_update_with_wrong_obj_owner(
         format="json",
     )
     assert update_response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_event_subscribe_with_login(event_create_with_login, client_with_credentials):
+    # create event
+    # use client with cred
+    # create request for subscribe
+    event = event_create_with_login()
+    url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
+    response = client_with_credentials.put(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["message"] == 'Subscribed to the event'
+
+
+@pytest.mark.django_db
+def test_event_already_subscribe_with_login(event_create_with_login,client_with_credentials):
+    event = event_create_with_login()
+    url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
+    response = client_with_credentials.put(url)
+    assert response.status_code == status.HTTP_200_OK
+
+    second_response = client_with_credentials.put(url)
+
+    assert second_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert second_response.data["message"] == 'Already Subscribed'
+
+
+@pytest.mark.django_db
+def test_event_subscribe_without_login(api_client, event_create_with_login):
+    event = event_create_with_login()
+    url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
+    response = api_client.put(url)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+@pytest.mark.django_db
+def test_event_unsubscribe_with_login(event_create_with_login, client_with_credentials):
+    event = event_create_with_login()
+    url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
+    response = client_with_credentials.put(url)
+    assert response.status_code == status.HTTP_200_OK
+
+    url = reverse("events-unsubscribe", kwargs={"pk": event.data["id"]})
+    second_response = client_with_credentials.put(url)
+    assert second_response.status_code == status.HTTP_200_OK
+    assert second_response.data["message"] == 'Unsubscribed from the event'
+
+
+
+@pytest.mark.django_db
+def test_event_alread_unsubscribe_with_login(event_create_with_login, client_with_credentials):
+    event = event_create_with_login()
+    url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
+    response = client_with_credentials.put(url)
+    assert response.status_code == status.HTTP_200_OK
+
+    url = reverse("events-unsubscribe", kwargs={"pk": event.data["id"]})
+    second_response = client_with_credentials.put(url)
+    assert second_response.status_code == status.HTTP_200_OK
+
+    third_response = client_with_credentials.put(url)
+    assert third_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert third_response.data["message"] == "Already Unsubscribed"
+
+
+
+@pytest.mark.django_db
+def test_event_unsubscribe_with_login(event_create_with_login,api_client):
+    event = event_create_with_login()
+    url = reverse("events-unsubscribe", kwargs={"pk": event.data["id"]})
+    response = api_client.put(url)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
