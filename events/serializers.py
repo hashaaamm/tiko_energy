@@ -54,6 +54,7 @@ class EventListCreateSerializer(serializers.ModelSerializer):
             "updated_date",
             "status",
             "number_of_attendees",
+            "maximum_attendees",
         ]
 
 
@@ -61,6 +62,7 @@ class EventDetailUpdateSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
     list_of_attendees = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     number_of_attendees = serializers.ReadOnlyField()
     created_date = serializers.ReadOnlyField()
     updated_date = serializers.ReadOnlyField()
@@ -109,6 +111,7 @@ class EventDetailUpdateSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "event_type",
+            "maximum_attendees",
             "list_of_attendees",
             "created_date",
             "updated_date",
@@ -122,17 +125,18 @@ class EventSubscribeSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         user = self.context["request"].user
-        success = False
         request_path = self.context["request"].path
 
         if "/subscribe" in request_path:
-
+            if instance.number_of_attendees == instance.maximum_attendees:
+                raise serializers.ValidationError(
+                    "Maximum number of attendees reached for this event."
+                )
             if user not in instance.list_of_attendees.all():
                 instance.list_of_attendees.add(user)
                 message = "Subscribed to the event"
-                success = True
             else:
-                message = "Already Subscribed"
+                raise serializers.ValidationError("Already Subscribed")
         elif "/unsubscribe" in request_path:
             if user in instance.list_of_attendees.all():
                 instance.list_of_attendees.remove(user)
@@ -140,7 +144,7 @@ class EventSubscribeSerializer(serializers.Serializer):
                 success = True
 
             else:
-                message = "Already Unsubscribed"
+                raise serializers.ValidationError("Already Unsubscribed")
 
         instance.save()
-        return {"message": message, "success": success}
+        return message

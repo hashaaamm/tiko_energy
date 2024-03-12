@@ -4,8 +4,11 @@ from rest_framework.response import Response
 from .mixins import QuerysetFilterMixin
 from .models import Event
 from .permissions import IsOwnerOrReadOnly
-from .serializers import (EventDetailUpdateSerializer,
-                          EventListCreateSerializer, EventSubscribeSerializer)
+from .serializers import (
+    EventDetailUpdateSerializer,
+    EventListCreateSerializer,
+    EventSubscribeSerializer,
+)
 
 
 class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
@@ -49,9 +52,6 @@ class EventSubscribeAndUnsubscribeView(generics.UpdateAPIView):
         event = self.get_object()
         serializer = self.get_serializer(event, data={})
         serializer.is_valid()
-        data = serializer.save()
-        status_code = (
-            status.HTTP_200_OK if data["success"] else status.HTTP_400_BAD_REQUEST
-        )
+        message = serializer.save()
 
-        return Response({"message": data["message"]}, status=status_code)
+        return Response({"message": message}, status=status.HTTP_200_OK)
