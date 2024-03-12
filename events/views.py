@@ -7,6 +7,7 @@ from .serializers import (
 from rest_framework import permissions
 
 from .mixins import QuerysetFilterMixin
+from .permissions import IsOwnerOrReadOnly
 
 
 class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
@@ -33,5 +34,5 @@ class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
 
 class EventsDetailUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Event.objects.all()
-    permission_classes = [permissions.AllowAny]
     serializer_class = EventDetailUpdateSerializer
+    permission_classes = [IsOwnerOrReadOnly]

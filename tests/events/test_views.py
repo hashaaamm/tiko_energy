@@ -3,6 +3,7 @@ from rest_framework import status
 from django.utils import timezone
 from django.urls import reverse
 from django.utils.dateparse import parse_datetime
+from rest_framework.test import APIClient
 
 
 valid_payload = {
@@ -135,7 +136,7 @@ def test_event_details(api_client, event_create_with_login):
 
 
 @pytest.mark.django_db
-def test_event_update(client_with_credentials, event_create_with_login):
+def test_event_update_with_obj_owner(client_with_credentials, event_create_with_login):
     event = event_create_with_login()
     url = reverse("events-detail-update", kwargs={"pk": event.data["id"]})
     response = client_with_credentials.get(url)
@@ -162,3 +163,38 @@ def test_event_update(client_with_credentials, event_create_with_login):
     assert data["end_date"] == payload["end_date"]
     assert data["event_type"] == payload["event_type"]
     assert data["active"] == payload["active"]
+
+
+@pytest.mark.django_db
+def test_event_update_with_wrong_obj_owner(
+    event_create_with_login, create_user, login_user
+):
+    """Test if any other user can update the event which they didn't create"""
+    # create event using user with id 1
+    event = event_create_with_login()
+
+    # create new user with id 2
+    user_details = {"email": "user2@example.com", "password": "asuh9898hs"}
+    create_user(user_details)
+    tokens_response = login_user(user_details)
+
+    # APIClient with user 2 tokens
+    client = APIClient()
+    client.credentials(HTTP_AUTHORIZATION=f'JWT {tokens_response.data["access"]}')
+
+    url = reverse("events-detail-update", kwargs={"pk": event.data["id"]})
+
+    payload = {
+        "name": "updated name",
+        "description": "updated description",
+        "start_date": "2026-03-15T10:00:00Z",
+        "end_date": "2027-03-15T15:00:00Z",
+        "event_type": "updated type",
+        "active": False,
+    }
+    update_response = client.put(
+        url,
+        data=payload,
+        format="json",
+    )
+    assert update_response.status_code == status.HTTP_403_FORBIDDEN
