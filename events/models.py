@@ -13,6 +13,7 @@ class Event(models.Model):
     end_date = models.DateTimeField()
     event_type = models.CharField(max_length=20)
     active = models.BooleanField(default=True)
+    maximum_attendees = models.IntegerField(default=50)
     list_of_attendees = models.ManyToManyField(
         User, default=None, related_name="attendees"
     )

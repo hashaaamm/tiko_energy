@@ -45,7 +45,6 @@ Requirements can be found in the requirements.txt file
    source venv/bin/activate    
    cd app
    git clone https://github.com/hashaaamm/tiko_energy.git
-   cd app
    ```
    
 2. Install dependencies:
