@@ -110,3 +110,25 @@ def test_event_list(api_client, event_create_with_login):
     # we are not testing the format for now, this might be required in production
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 2
+
+
+@pytest.mark.django_db
+def test_event_details(api_client, event_create_with_login):
+    event = event_create_with_login()
+    url = reverse("events-detail", kwargs={"pk": event.data["id"]})
+    response = api_client.get(url)
+    data = response.data
+
+    assert response.status_code == status.HTTP_200_OK
+
+    assert data["id"]
+    assert data["owner"]
+    assert data["name"] == valid_payload["name"]
+    assert data["description"] == valid_payload["description"]
+    assert parse_datetime(data["start_date"]) == valid_payload["start_date"]
+    assert parse_datetime(data["end_date"]) == valid_payload["end_date"]
+    assert data["event_type"] == valid_payload["event_type"]
+    assert data["list_of_attendees"] == []
+    assert data["created_date"]
+    assert data["updated_date"]
+    assert data["status"]

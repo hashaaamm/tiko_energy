@@ -1,13 +1,8 @@
 from rest_framework import generics
-from django.db.models import Q
 from .models import Event
-from .serializers import (
-    EventListCreateSerializer,
-)
+from .serializers import EventListCreateSerializer, EventDetailSerializer
 from rest_framework import permissions
-from rest_framework import status
-from django.utils import timezone
-from rest_framework.response import Response
+
 from .mixins import QuerysetFilterMixin
 
 
@@ -31,3 +26,9 @@ class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return self.filter_queryset(queryset)
+
+
+class EventsDetailView(generics.RetrieveAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventDetailSerializer
+    permission_classes = [permissions.AllowAny]
