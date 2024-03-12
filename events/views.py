@@ -1,15 +1,11 @@
-from rest_framework import generics, status
-from .models import Event
-from .serializers import (
-    EventListCreateSerializer,
-    EventDetailUpdateSerializer,
-    EventSubscribeSerializer,
-)
-from rest_framework import permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from .mixins import QuerysetFilterMixin
+from .models import Event
 from .permissions import IsOwnerOrReadOnly
+from .serializers import (EventDetailUpdateSerializer,
+                          EventListCreateSerializer, EventSubscribeSerializer)
 
 
 class EventsListCreateView(QuerysetFilterMixin, generics.ListCreateAPIView):
@@ -54,6 +50,8 @@ class EventSubscribeAndUnsubscribeView(generics.UpdateAPIView):
         serializer = self.get_serializer(event, data={})
         serializer.is_valid()
         data = serializer.save()
-        status_code = status.HTTP_200_OK if data["success"] else status.HTTP_400_BAD_REQUEST
+        status_code = (
+            status.HTTP_200_OK if data["success"] else status.HTTP_400_BAD_REQUEST
+        )
 
         return Response({"message": data["message"]}, status=status_code)

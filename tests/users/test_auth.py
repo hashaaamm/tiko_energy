@@ -1,8 +1,7 @@
 import pytest
 from rest_framework import status
-from ..error_messages import REQUIRED_ERROR, INVALID_CREDENTIALS_ERROR
-from django.urls import reverse
-from rest_framework.test import APIClient
+
+from ..error_messages import INVALID_CREDENTIALS_ERROR, REQUIRED_ERROR
 
 
 @pytest.mark.django_db

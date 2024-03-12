@@ -1,8 +1,7 @@
 import pytest
 from rest_framework import status
+
 from ..error_messages import REQUIRED_ERROR
-from django.urls import reverse
-from rest_framework.test import APIClient
 
 
 @pytest.mark.django_db

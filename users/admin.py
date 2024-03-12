@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
 from .models import CustomUser
@@ -63,7 +63,6 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ["is_admin"]
     fieldsets = [
         (None, {"fields": ["email", "password"]}),
-
         ("Permissions", {"fields": ["is_admin"]}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -73,7 +72,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email",  "password1", "password2"],
+                "fields": ["email", "password1", "password2"],
             },
         ),
     ]

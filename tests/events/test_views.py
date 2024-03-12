@@ -1,10 +1,9 @@
 import pytest
-from rest_framework import status
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from rest_framework import status
 from rest_framework.test import APIClient
-
 
 valid_payload = {
     "name": "Wine tasting",
@@ -55,7 +54,7 @@ def test_event_create_with_valid_data(event_create_with_login):
             {
                 "name": "Wine tasting",
                 "description": "Try wines from all over Portugal",
-                "start_date": timezone.now() - +timezone.timedelta(hours=5),
+                "start_date": timezone.now() - timezone.timedelta(hours=5),
                 "end_date": timezone.now() + timezone.timedelta(hours=5),
                 "event_type": "Meeting",
             },
@@ -66,7 +65,7 @@ def test_event_create_with_valid_data(event_create_with_login):
             {
                 "name": "Wine tasting",
                 "description": "Try wines from all over Portugal",
-                "start_date": timezone.now(),
+                "start_date": timezone.now() + timezone.timedelta(hours=5),
                 "end_date": timezone.now() - timezone.timedelta(hours=5),
                 "event_type": "Meeting",
             },
@@ -209,11 +208,13 @@ def test_event_subscribe_with_login(event_create_with_login, client_with_credent
     url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
     response = client_with_credentials.put(url)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["message"] == 'Subscribed to the event'
+    assert response.data["message"] == "Subscribed to the event"
 
 
 @pytest.mark.django_db
-def test_event_already_subscribe_with_login(event_create_with_login,client_with_credentials):
+def test_event_already_subscribe_with_login(
+    event_create_with_login, client_with_credentials
+):
     event = event_create_with_login()
     url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
     response = client_with_credentials.put(url)
@@ -222,7 +223,7 @@ def test_event_already_subscribe_with_login(event_create_with_login,client_with_
     second_response = client_with_credentials.put(url)
 
     assert second_response.status_code == status.HTTP_400_BAD_REQUEST
-    assert second_response.data["message"] == 'Already Subscribed'
+    assert second_response.data["message"] == "Already Subscribed"
 
 
 @pytest.mark.django_db
@@ -232,6 +233,7 @@ def test_event_subscribe_without_login(api_client, event_create_with_login):
     response = api_client.put(url)
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
 
 @pytest.mark.django_db
 def test_event_unsubscribe_with_login(event_create_with_login, client_with_credentials):
@@ -243,12 +245,13 @@ def test_event_unsubscribe_with_login(event_create_with_login, client_with_crede
     url = reverse("events-unsubscribe", kwargs={"pk": event.data["id"]})
     second_response = client_with_credentials.put(url)
     assert second_response.status_code == status.HTTP_200_OK
-    assert second_response.data["message"] == 'Unsubscribed from the event'
-
+    assert second_response.data["message"] == "Unsubscribed from the event"
 
 
 @pytest.mark.django_db
-def test_event_alread_unsubscribe_with_login(event_create_with_login, client_with_credentials):
+def test_event_already_unsubscribe_with_login(
+    event_create_with_login, client_with_credentials
+):
     event = event_create_with_login()
     url = reverse("events-subscribe", kwargs={"pk": event.data["id"]})
     response = client_with_credentials.put(url)
@@ -263,11 +266,9 @@ def test_event_alread_unsubscribe_with_login(event_create_with_login, client_wit
     assert third_response.data["message"] == "Already Unsubscribed"
 
 
-
 @pytest.mark.django_db
-def test_event_unsubscribe_with_login(event_create_with_login,api_client):
+def test_event_unsubscribe_without_login(event_create_with_login, api_client):
     event = event_create_with_login()
     url = reverse("events-unsubscribe", kwargs={"pk": event.data["id"]})
     response = api_client.put(url)
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-

@@ -1,5 +1,6 @@
 import pytest
 from django.utils import timezone
+
 from events.models import Event
 from users.models import CustomUser
 
@@ -37,5 +38,3 @@ def test_events_model(create_user):
     assert not events.list_of_attendees.exists()
     assert events.created_date
     assert events.updated_date
-
-

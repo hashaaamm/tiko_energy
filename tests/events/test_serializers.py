@@ -1,14 +1,13 @@
 import pytest
-from events.serializers import (
-    EventListCreateSerializer,
-    EventDetailUpdateSerializer,
-    EventSubscribeSerializer,
-)
 from django.contrib.auth import get_user_model
-from django.utils import timezone
-from events.models import Event
-from django.utils.dateparse import parse_datetime
 from django.http import HttpRequest
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+
+from events.models import Event
+from events.serializers import (EventDetailUpdateSerializer,
+                                EventListCreateSerializer,
+                                EventSubscribeSerializer)
 
 User = get_user_model()
 
@@ -148,7 +147,7 @@ def test_event_update_serializer(valid_user):
     start_date = timezone.now()
     end_date = timezone.now() + timezone.timedelta(hours=5)
     event_type = "Meeting"
-    event = Event.objects.create(
+    Event.objects.create(
         name=name,
         owner=owner,
         description=description,
@@ -179,7 +178,7 @@ def test_event_subscribe_serializer(valid_user):
     start_date = timezone.now()
     end_date = timezone.now() + timezone.timedelta(hours=5)
     event_type = "Meeting"
-    event = Event.objects.create(
+    Event.objects.create(
         name=name,
         owner=owner,
         description=description,

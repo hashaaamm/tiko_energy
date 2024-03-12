@@ -1,5 +1,6 @@
-from rest_framework import serializers
 from django.utils import timezone
+from rest_framework import serializers
+
 from .models import Event
 
 
@@ -60,7 +61,7 @@ class EventDetailUpdateSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
     list_of_attendees = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    number_of_attendees = serializers.ReadOnlyField
+    number_of_attendees = serializers.ReadOnlyField()
     created_date = serializers.ReadOnlyField()
     updated_date = serializers.ReadOnlyField()
     status = serializers.ReadOnlyField()
@@ -122,8 +123,9 @@ class EventSubscribeSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         user = self.context["request"].user
         success = False
+        request_path = self.context["request"].path
 
-        if "/subscribe" in self.context["request"].path:
+        if "/subscribe" in request_path:
 
             if user not in instance.list_of_attendees.all():
                 instance.list_of_attendees.add(user)
@@ -131,7 +133,7 @@ class EventSubscribeSerializer(serializers.Serializer):
                 success = True
             else:
                 message = "Already Subscribed"
-        elif "/unsubscribe" in self.context["request"].path:
+        elif "/unsubscribe" in request_path:
             if user in instance.list_of_attendees.all():
                 instance.list_of_attendees.remove(user)
                 message = "Unsubscribed from the event"

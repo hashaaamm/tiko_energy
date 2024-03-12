@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils import timezone
 
 User = get_user_model()
@@ -33,3 +33,6 @@ class Event(models.Model):
     @property
     def number_of_attendees(self):
         return self.list_of_attendees.count()
+
+    def __str__(self):
+        return self.name
