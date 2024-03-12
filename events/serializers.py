@@ -130,13 +130,13 @@ class EventSubscribeSerializer(serializers.Serializer):
         if "/subscribe" in request_path:
             if instance.number_of_attendees == instance.maximum_attendees:
                 raise serializers.ValidationError(
-                    "Maximum number of attendees reached for this event."
+                    {"message": "Maximum number of attendees reached for this event."}
                 )
             if user not in instance.list_of_attendees.all():
                 instance.list_of_attendees.add(user)
                 message = "Subscribed to the event"
             else:
-                raise serializers.ValidationError("Already Subscribed")
+                raise serializers.ValidationError({"message": "Already Subscribed"})
         elif "/unsubscribe" in request_path:
             if user in instance.list_of_attendees.all():
                 instance.list_of_attendees.remove(user)
@@ -144,7 +144,7 @@ class EventSubscribeSerializer(serializers.Serializer):
                 success = True
 
             else:
-                raise serializers.ValidationError("Already Unsubscribed")
+                raise serializers.ValidationError({"message": "Already Unsubscribed"})
 
         instance.save()
         return message
