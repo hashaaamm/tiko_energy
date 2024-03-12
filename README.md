@@ -16,7 +16,21 @@ Coding challenge by Tiko Energy.
 
 ## Introduction
 
-This is an Event manager app which allow organisers to create and manage events and allow users to attend the events
+This is an Event manager app which allow organisers to create and manage events and allow users to attend the events.
+
+## Features
+- Users can register an account using Email and password.
+- Users can log in to get access token and refresh token.
+- Access token with lifetime of 1 hour.
+- Refresh token with lifetime of 1 day.
+- Users can Create event after login.
+- Users can Update only events they have created.
+- Users can list all events.
+- Users can filter events by owner and other fields.
+- Users can cancel only events they have created.
+- Users can subscribe or unsubscribe to events
+- Events have validation
+
 
 ## Requirements
 
@@ -60,6 +74,18 @@ Requirements can be found in the requirements.txt file
 
 ## Testing
 
+1. Run Test:
+   ```bash
+   pytest
+   ```
+
 ## Code coverage
 
+1. To check coverage:
+   ```bash
+   pytest -p no:warnings --cov=.
+   ```
+
 ## API Documentation
+
+1. Access API docs at http://127.0.0.1:8000/api/swagger-docs/
