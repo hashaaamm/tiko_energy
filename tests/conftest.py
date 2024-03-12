@@ -64,3 +64,11 @@ def verify_token(api_client):
         return api_client.post(url, payload, format="json")
 
     return _verify_token
+
+
+@pytest.fixture
+def client_with_credentials(login_user):
+    response_login_user = login_user()
+    client = APIClient()
+    client.credentials(HTTP_AUTHORIZATION=f'JWT {response_login_user.data["access"]}')
+    return client
