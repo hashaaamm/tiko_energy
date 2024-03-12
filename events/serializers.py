@@ -3,9 +3,13 @@ from django.utils import timezone
 from .models import Event
 
 
-class EventCreateSerializer(serializers.ModelSerializer):
+class EventListCreateSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
+    created_date = serializers.ReadOnlyField()
+    updated_date = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField()
+    number_of_attendees = serializers.ReadOnlyField()
 
     def validate(self, data):
         """
@@ -34,22 +38,6 @@ class EventCreateSerializer(serializers.ModelSerializer):
         validated_data["owner"] = user
         instance = super().create(validated_data)
         return instance
-
-    class Meta:
-        model = Event
-        fields = [
-            "id",
-            "owner",
-            "name",
-            "description",
-            "start_date",
-            "end_date",
-            "event_type",
-        ]
-
-
-class EventListSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField()
 
     class Meta:
         model = Event

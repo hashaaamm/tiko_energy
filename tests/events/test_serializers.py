@@ -1,7 +1,6 @@
 import pytest
-from events.serializer import (
-    EventCreateSerializer,
-    EventListSerializer,
+from events.serializers import (
+    EventListCreateSerializer,
     EventDetailSerializer,
     EventUpdateSerializer,
     EventSubscribeSerializer,
@@ -20,7 +19,7 @@ User = get_user_model()
 def test_event_create_serializer_with_valid_data(valid_user):
     request = HttpRequest()
     request.user = valid_user
-    serializer = EventCreateSerializer(
+    serializer = EventListCreateSerializer(
         data={
             "name": "Wine tasting",
             "description": "Try wines from all over Portugal",
@@ -68,7 +67,7 @@ def test_event_create_serializer_with_invalid_date(
     # payload["owner"] = valid_user.pk
     request = HttpRequest()
     request.user = valid_user
-    serializer = EventCreateSerializer(
+    serializer = EventListCreateSerializer(
         data=payload,
         context={"request": request},
     )
@@ -80,7 +79,7 @@ def test_event_create_serializer_with_invalid_date(
 @pytest.mark.django_db
 def test_event_create_serializer_with_invalid_data(valid_user):
 
-    serializer = EventCreateSerializer(data={})
+    serializer = EventListCreateSerializer(data={})
     assert not serializer.is_valid()
 
 
@@ -101,7 +100,7 @@ def test_event_list_serializer(valid_user):
         event_type=event_type,
     )
     all_events = Event.objects.all()
-    serializer = EventListSerializer(all_events, many=True)
+    serializer = EventListCreateSerializer(all_events, many=True)
     data = serializer.data[0]
     assert data["name"] == name
     assert data["owner"] == owner.pk
