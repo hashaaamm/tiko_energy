@@ -42,16 +42,17 @@ Requirements can be found in the requirements.txt file
 
 1. Create venv and Clone the repository:
    ```bash
-   mkdir app
+   mkdir project
+   cd project 
    python3.11 -m venv venv 
-   source venv/bin/activate    
-   cd app
+   source venv/bin/activate
    git clone https://github.com/hashaaamm/tiko_energy.git
+   cd tiko_energy
    ```
    
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip3 install -r requirements.txt
    ```
    
 3. Run migrations:
