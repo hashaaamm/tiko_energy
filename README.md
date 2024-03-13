@@ -11,7 +11,8 @@ Coding challenge by Tiko Energy.
 5. [Usage](#usage)
 6. [Testing](#testing)
 7. [Code coverage](#Code-coverage)
-8. [API Documentation](#api-documentation)
+8. [Linting](#Linting)
+9. [API Documentation](#api-documentation)
 
 
 ## Introduction
@@ -85,6 +86,15 @@ Requirements can be found in the requirements.txt file
    ```bash
    pytest -p no:warnings --cov=.
    ```
+## Linting
+
+1. To check coverage:
+   ```bash
+   flake8 .
+   black .
+   isort .
+   ```
+
 
 ## API Documentation
 
