@@ -1,7 +1,6 @@
 # Tiko Energy
 
-This is coding challenge by Tiko.
-
+edit
 
 ## Table of Contents
 
