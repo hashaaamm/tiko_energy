@@ -1,6 +1,6 @@
 # Tiko Energy
 
-edit from github, branch6
+after merge
 
 ## Table of Contents
 
