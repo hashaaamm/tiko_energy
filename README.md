@@ -1,6 +1,7 @@
 # Tiko Energy
 
-branch7
+This is a coding challenge by Tiko Energy.
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
