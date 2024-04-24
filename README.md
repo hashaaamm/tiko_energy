@@ -1,7 +1,6 @@
 # Tiko Energy
 
-after merge
-
+branch7
 ## Table of Contents
 
 1. [Introduction](#introduction)
