@@ -1,6 +1,6 @@
 # Tiko Energy
 
-edit
+branch3
 
 ## Table of Contents
 
@@ -14,12 +14,12 @@ edit
 8. [Linting](#Linting)
 9. [API Documentation](#api-documentation)
 
-
 ## Introduction
 
 This is an Event manager app which allow organisers to create and manage events and allow users to attend the events.
 
 ## Features
+
 - Users can register an account using Email and password.
 - Users can log in to get access token and refresh token.
 - Access token with lifetime of 1 hour.
@@ -33,7 +33,6 @@ This is an Event manager app which allow organisers to create and manage events 
 - Events have validation
 - Users can not subscribe to event if max limit reach
 
-
 ## Requirements
 
 Requirements can be found in the requirements.txt file
@@ -43,29 +42,28 @@ Requirements can be found in the requirements.txt file
 1. Create venv and Clone the repository:
    ```bash
    mkdir project
-   cd project 
-   python3.11 -m venv venv 
+   cd project
+   python3.11 -m venv venv
    source venv/bin/activate
    git clone https://github.com/hashaaamm/tiko_energy.git
    cd tiko_energy
    ```
-   
 2. Install dependencies:
    ```bash
    pip3 install -r requirements.txt
    ```
-   
 3. Run migrations:
    ```bash
-   python manage.py makemigrations 
+   python manage.py makemigrations
    python manage.py migrate
    ```
 
 ## Usage
 
 1. Create superuser:
+
    ```bash
-   python manage.py createsuperuser 
+   python manage.py createsuperuser
    ```
 
 2. Start the server:
@@ -87,6 +85,7 @@ Requirements can be found in the requirements.txt file
    ```bash
    pytest -p no:warnings --cov=.
    ```
+
 ## Linting
 
 1. To check coverage:
@@ -95,7 +94,6 @@ Requirements can be found in the requirements.txt file
    black .
    isort .
    ```
-
 
 ## API Documentation
 
