@@ -1,6 +1,6 @@
 # Tiko Energy
 
-challenge by Energy!!
+Tiko Energy
 
 ## Table of Contents
 
