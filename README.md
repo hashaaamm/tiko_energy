@@ -1,6 +1,6 @@
 # Tiko Energy
 
-Coding challenge by Tiko Energy!!
+challenge by Energy!!
 
 ## Table of Contents
 
