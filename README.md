@@ -1,6 +1,6 @@
 # Tiko Energy
 
-branch7
+The coding challenge for the senior backend engineer role by Tiko.
 ## Table of Contents
 
 1. [Introduction](#introduction)
